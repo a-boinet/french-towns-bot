@@ -1,6 +1,3 @@
 tweepy
 emoji
-zlib
-json
-binascii
 pre-commit
