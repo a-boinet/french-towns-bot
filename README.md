@@ -1,10 +1,14 @@
 # French Towns Bot
 A Twitter bot that creates french-sounding city names
 
+<img src="./img/logo.jpg" alt="French Towns Bot logo" align="right" width="200">
+
 ## Table of Contents
 
 1. [Setup](#setup)
-2. [Git hook installation](#git-hook-installation)
+2. [Run](#run)
+3. [How it works](#how-it-works)
+4. [Git hook installation](#git-hook-installation)
 
 ## Setup
 
@@ -12,6 +16,15 @@ First, let's install the required modules:
 ```bash
 python install -r requirements.txt
 ```
+
+In order to generate city names, the bot will need what I called *distribution dictionaries* (check out the [How it works](#how-it-works) section for more information).
+
+Run the following script:
+
+```bash
+python create_zlib_dicts.py
+```
+
 To be able to post on Twitter, you must provide the bot with your Twitter API Tokens
 (otherwise you will get an error):
 ```bash
@@ -25,10 +38,15 @@ ACCESS_TOKEN=your_ACCESS_TOKEN_here
 ACCESS_TOKEN_SECRET=your_ACCESS_TOKEN_SECRET_here
 ```
 
-Once you have done that, you are good to go!
+## Run
+
 ```bash
 python bot.py
 ```
+
+## How it works
+
+TODO
 
 ## Git hook installation
 
