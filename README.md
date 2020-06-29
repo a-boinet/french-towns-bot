@@ -1,12 +1,12 @@
 # French Towns Bot
 A Twitter bot that creates french-sounding city names
 
+<img src="./img/logo.jpg" alt="French Towns Bot logo" align="right" width="200">
+
 <a href="https://twitter.com/intent/follow?screen_name=FrenchTownsBot">
   <img src="https://img.shields.io/twitter/follow/FrenchTownsBot?style=social&logo=twitter"   
     alt="Follow this bot on Twitter">
 </a>
-     
-<img src="./img/logo.jpg" alt="French Towns Bot logo" align="right" width="200">
 
 ## Table of Contents
 
