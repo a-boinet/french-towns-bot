@@ -4,7 +4,7 @@ A Twitter bot that creates french-sounding city names
 <img src="./img/logo.jpg" alt="French Towns Bot logo" align="right" width="200">
 
 <a href="https://twitter.com/intent/follow?screen_name=FrenchTownsBot">
-  <img src="https://img.shields.io/twitter/follow/FrenchTownsBot?style=social&logo=twitter"   
+  <img src="https://img.shields.io/twitter/follow/FrenchTownsBot?style=social&logo=twitter"
     alt="Follow this bot on Twitter">
 </a>
 
@@ -14,6 +14,7 @@ A Twitter bot that creates french-sounding city names
 2. [Run](#run)
 3. [How it works](#how-it-works)
 4. [Git hook installation](#git-hook-installation)
+5. [License](#license)
 
 ## Setup
 
@@ -59,3 +60,6 @@ If you're planning on contributing to this project, you can enable the pre-commi
 ```bash
 ./install-githook.sh
 ```
+
+## License
+Usage is provided under the [GPL-3.0 License ](https://www.gnu.org/licenses/gpl-3.0.en.html). See LICENSE for the full details.
