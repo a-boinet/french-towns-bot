@@ -42,5 +42,5 @@ for region in regions_dict.keys():
     substitute_name = region.replace("'", "-")
     generate_distrib_dict(
         name_list=regions_dict[region],
-        file_path=f"./utils/regions_france_dict/distrib_dict_{substitute_name}.zlib",
+        file_path=f"{pathlib.Path(__file__).parent.absolute()}/resources/regions_france_dict/distrib_dict_{substitute_name}.zlib",
     )
