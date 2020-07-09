@@ -1,13 +1,16 @@
+import pathlib
 import random as rd
 from emoji import emojize
-from utils import (
+from time import sleep
+
+from utils.utils import (
     read_distrib_dict_from_file,
     get_list_from_file,
     create_words,
 )
-from create_person import create_person
-from twitter_store import TwitterStore
-from time import sleep
+
+# from create_person import create_person
+from utils.twitter_store import TwitterStore
 
 REGION_DICT = {
     "Auvergne-Rhône-Alpes": [4189],
@@ -54,13 +57,17 @@ def generate_tweet():
     # City name generation
     try:
         distribution_dict = read_distrib_dict_from_file(
-            "./regions_france_dict/distrib_dict_" + region.replace("'", "-") + ".zlib"
+            f"{pathlib.Path(__file__).parent.absolute()}/resources/regions_france_dict/distrib_dict_"
+            + region.replace("'", "-")
+            + ".zlib"
         )
     except:
         msg = f"\n\n\033[1m\033[91m[ERROR] Couldn't read distribution dictionary for {region}\033[0m\n\n"
         msg += "\033[91mDid you forget to run 'create_zlib_dicts.py'?\033[0m"
         raise Exception(msg)
-    name_list = get_list_from_file(f"./regions_france/all_cities.txt")
+    name_list = get_list_from_file(
+        f"{pathlib.Path(__file__).parent.absolute()}/resources/regions_france/all_cities.txt"
+    )
     city_name = create_words(
         distrib_dict=distribution_dict, name_list_source=name_list, number_of_words=1
     )[0]
@@ -84,10 +91,7 @@ if __name__ == "__main__":
         tw_store = TwitterStore()
         tweet_txt = generate_tweet()
         print(tweet_txt)
-        in_val = input("")
-        if "ok" in str(in_val).lower():
-            ret_value = tw_store.tweet(text_to_tweet=tweet_txt)
-            print("Tweeted!\n")
-            break
-            # input("\n")
-            # sleep(60 * 60 * 1.5) # 1.5 hours
+        ret_value = tw_store.tweet(text_to_tweet=tweet_txt)
+        print("Tweeted!\n")
+        # input("\n")
+        sleep(60 * 60 * 3)  # 1.5 hours
