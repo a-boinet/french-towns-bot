@@ -1,7 +1,10 @@
 import tweepy
+import pathlib
 
 try:
-    keys = open("twitter_keys.txt", "r").readlines()
+    keys = open(
+        f"{pathlib.Path(__file__).parent.absolute()}/twitter_keys.txt", "r"
+    ).readlines()
 
     CONSUMER_KEY = keys[0].strip("\n").split("=")
     assert CONSUMER_KEY[0] == "CONSUMER_KEY", "Bad format for CONSUMER_KEY"
@@ -37,5 +40,6 @@ class TwitterStore:
 
 
 if __name__ == "__main__":
+    input("Press enter to send a test tweet")
     ts = TwitterStore()
     ts.tweet("Hello world! This is a test")

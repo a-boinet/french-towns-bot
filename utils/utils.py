@@ -1,4 +1,5 @@
 import zlib
+import pathlib
 import json
 import binascii
 import time
@@ -133,10 +134,36 @@ def is_correct(word, name_list_source=None, fr_dict=None):
     if fr_dict is None:
         fr_dict = []
     # Must be 4 letters or more
-    forbidden_words = open("./res/forbidden_words.txt", "r").read().split("\n")
+    forbidden_words = (
+        open(
+            f"{pathlib.Path(__file__).parent.absolute()}/../resources/forbidden_words.txt",
+            "r",
+        )
+        .read()
+        .split("\n")
+    )
     forbidden_words.pop()
-    forbidden_patterns = open("./res/forbidden_patterns.txt", "r").read().split("\n")
+    forbidden_patterns = (
+        open(
+            f"{pathlib.Path(__file__).parent.absolute()}/../resources/forbidden_patterns.txt",
+            "r",
+        )
+        .read()
+        .split("\n")
+    )
     forbidden_patterns.pop()
+    try:
+        already_tweeted = (
+            open(
+                f"{pathlib.Path(__file__).parent.absolute()}/../resources/already_tweeted.txt",
+                "r",
+            )
+            .read()
+            .split("\n")
+        )
+        already_tweeted = [w.lower() for w in already_tweeted]
+    except:
+        already_tweeted = []
     contains_forbidden_pattern = False
     for fp in forbidden_patterns:
         if fp in pattern_word:
@@ -149,6 +176,7 @@ def is_correct(word, name_list_source=None, fr_dict=None):
         word not in forbidden_words
         and word not in name_list_source
         and word not in fr_dict
+        and word not in already_tweeted
         and not contains_forbidden_pattern
         and not contains_long_word
         and not word.startswith("x")  # Doesn't sound french
@@ -187,7 +215,14 @@ def reformat_string(v_string):
         final_string += word.capitalize()
     # Delete repeting patterns
     final_string = re.sub(r"(.+?)\1+", r"\1", final_string)
-    replace_list = open("./res/replace_patterns.txt", "r").read().split("\n")
+    replace_list = (
+        open(
+            f"{pathlib.Path(__file__).parent.absolute()}/../resources/replace_patterns.txt",
+            "r",
+        )
+        .read()
+        .split("\n")
+    )
     replace_list.pop()
     for i in range(len(replace_list)):
         replace_list[i] = replace_list[i].split(",")
@@ -199,7 +234,10 @@ def reformat_string(v_string):
 def create_words(
     distrib_dict, name_list_source=None, mean_length=12, number_of_words=100, seed=None
 ):
-    fr_dict_list = open("dict_from_hbenbel_French-Dictionary.txt", "r").read()
+    fr_dict_list = open(
+        f"{pathlib.Path(__file__).parent.absolute()}/../resources/french-dictionary.txt",
+        "r",
+    ).read()
     fr_dict_list = fr_dict_list.split("\n")
     fr_dict_list.pop()
     if seed is None:
@@ -212,7 +250,6 @@ def create_words(
             min_len = rd.choices(
                 population=range(45), weights=FRENCH_CITIES_COUNT_BY_NAME_LENGTH
             )[0]
-            # min_len = rd.gauss(mean_length, round(mean_length/3))
             idx = deque([" ", " ", " "])
             word = "    "
             counter = 0
@@ -237,6 +274,10 @@ def create_words(
                 word=new_name, name_list_source=name_list_source, fr_dict=fr_dict_list
             ):
                 words.append(new_name)
+                with open(
+                    f"{pathlib.Path(__file__).parent.absolute()}/../resources/already_tweeted.txt",
+                    "a",
+                ) as file:
+                    file.write(f"{new_name}\n")
                 valid = True
-            # print(new_name)
     return words
