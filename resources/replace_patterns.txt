@@ -1,0 +1,27 @@
+D',d'
+L',l'
+-Et-,-et-
+-En-,-en-
+-Du-,-du-
+-De-,-de-
+-Des-,-des-
+-Le-,-le-
+-La-,-la-
+-Les-,-les-
+-Lès-,-lès-
+-Sur-,-sur-
+-Sous-,-sous-
+-Sain-,-Saint-
+Abaye,Abbaye
+vile,ville
+Vile,Ville
+chapele,chapelle
+Chapele,Chapelle
+Pere,Père
+Frere,Frère
+La Mesnil,Le Mesnil
+la-Rivières,la-Rivière
+la Rivières,la Rivière
+du-Mer,sur-Mer
+de-Mer,sur-Mer
+le-Mer,sur-Mer

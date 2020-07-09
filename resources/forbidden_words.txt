@@ -1,0 +1,55 @@
+# Names we don't want
+sous
+la ché
+le le
+la la
+les les
+de de
+des des
+du du
+ville
+la ville
+la villes
+les ville
+les villes
+la des
+la pas
+ponts
+buche
+la haye
+chapelle
+notre
+l'église
+saint-martin
+l'évêque
+val-lès
+# French insults
+putain
+merde
+batard
+salop
+salope
+connard
+connasse
+enculé
+enculée
+pédé
+# English insults
+nigger
+nigga
+negro
+fuck
+suck
+shit
+dick
+ass
+asshole
+bitch
+bastard
+damn
+bugger
+choad
+shag
+wanker
+twat
+fag
