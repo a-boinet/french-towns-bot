@@ -42,6 +42,7 @@ saint-sur
 saint-sous
 saint-de
 du-des
+du-le
 et-la
 la-et
 et-le
