@@ -1,3 +1,5 @@
+import pathlib
+
 from utils.utils import generate_distrib_dict, get_list_from_file
 
 liste_regions = [
@@ -25,7 +27,9 @@ regions_dict = {}
 
 for region in liste_regions:
     data = get_list_from_file(
-        "./utils/regions_france/" + region.replace("'", "-") + ".txt"
+        f"{pathlib.Path(__file__).parent.absolute()}/resources/regions_france/"
+        + region.replace("'", "-")
+        + ".txt"
     )
     data.pop()
     print(len(data), region)

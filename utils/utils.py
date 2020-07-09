@@ -104,7 +104,9 @@ def generate_distrib_dict(name_list, file_path, alphabet=ALPHABET_FR):
             distrib_dict[idx[0]][idx[1]][idx[2]][idx[3]] += 1
     json_dict = json.dumps(distrib_dict)
     try:
-        mkdir("./utils/regions_france_dict")
+        mkdir(
+            f"{pathlib.Path(__file__).parent.absolute()}/../resources/regions_france_dict"
+        )
     except FileExistsError:
         pass
     print("Generation done, writing file\n")
