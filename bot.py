@@ -94,4 +94,4 @@ if __name__ == "__main__":
         ret_value = tw_store.tweet(text_to_tweet=tweet_txt)
         print("Tweeted!\n")
         # input("\n")
-        sleep(60 * 60 * 4)  # 4 hours
+        sleep(60 * 60 * 6)  # 6 hours
