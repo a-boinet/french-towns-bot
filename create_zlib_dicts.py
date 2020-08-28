@@ -1,5 +1,6 @@
 import pathlib
 
+from tqdm import tqdm
 from utils.utils import generate_distrib_dict, get_list_from_file
 
 liste_regions = [
@@ -37,7 +38,7 @@ for region in liste_regions:
 
 print("\nStarting dict generation\n")
 
-for region in regions_dict.keys():
+for region in tqdm(regions_dict.keys()):
     print(f"Generation dict for {region}")
     substitute_name = region.replace("'", "-")
     generate_distrib_dict(

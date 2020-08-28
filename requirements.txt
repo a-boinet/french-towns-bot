@@ -1,3 +1,4 @@
 tweepy
 emoji
 pre-commit
+tqdm
