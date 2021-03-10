@@ -2,3 +2,4 @@ tweepy
 emoji
 pre-commit
 tqdm
+regex

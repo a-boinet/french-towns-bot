@@ -8,6 +8,7 @@ from utils.utils import (
     get_list_from_file,
     create_words,
 )
+from utils.discord_notify import DiscordNotifier
 
 # from create_person import create_person
 from utils.twitter_store import TwitterStore
@@ -76,7 +77,7 @@ def generate_tweet():
 
     # Population
     population = round(rd.expovariate(lambd=POPULATION_LAMBDA) + 1)
-    ret_str += emojize(f":adult: {population} habitants")
+    ret_str += emojize(f":man: {population} habitants")
 
     # # Mayor
     # mayor = create_person()
@@ -91,7 +92,9 @@ if __name__ == "__main__":
         tw_store = TwitterStore()
         tweet_txt = generate_tweet()
         print(tweet_txt)
-        ret_value = tw_store.tweet(text_to_tweet=tweet_txt)
+        response = tw_store.tweet(text_to_tweet=tweet_txt)
+        discord_notifier = DiscordNotifier()
+        discord_notifier.notify_tweet(twitter_store_response=response)
         print("Tweeted!\n")
         # input("\n")
         sleep(60 * 60 * 12)  # 12 hours

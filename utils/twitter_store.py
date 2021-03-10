@@ -40,6 +40,8 @@ class TwitterStore:
 
 
 if __name__ == "__main__":
-    input("Press enter to send a test tweet")
+    input("Press enter to send a test tweet\n")
     ts = TwitterStore()
-    ts.tweet("Hello world! This is a test")
+    response = ts.tweet("Hello world! This is a test")
+    tweet_url = f"https://twitter.com/twitter/statuses/{response.id_str}"
+    print(tweet_url)
