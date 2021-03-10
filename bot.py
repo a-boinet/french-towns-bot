@@ -1,5 +1,6 @@
 import pathlib
 import random as rd
+import traceback
 from emoji import emojize
 from time import sleep
 
@@ -8,7 +9,7 @@ from utils.utils import (
     get_list_from_file,
     create_words,
 )
-from utils.discord_notify import DiscordNotifier
+from utils.discord_notify import DiscordNotifier, URL_TWEET, URL_TWEET_LOGS
 
 # from create_person import create_person
 from utils.twitter_store import TwitterStore
@@ -89,12 +90,18 @@ def generate_tweet():
 
 if __name__ == "__main__":
     while True:
-        tw_store = TwitterStore()
-        tweet_txt = generate_tweet()
-        print(tweet_txt)
-        response = tw_store.tweet(text_to_tweet=tweet_txt)
-        discord_notifier = DiscordNotifier()
-        discord_notifier.notify_tweet(twitter_store_response=response)
-        print("Tweeted!\n")
-        # input("\n")
-        sleep(60 * 60 * 12)  # 12 hours
+        try:
+            tw_store = TwitterStore()
+            tweet_txt = generate_tweet()
+            print(tweet_txt)
+            response = tw_store.tweet(text_to_tweet=tweet_txt)
+            discord_notifier = DiscordNotifier(url=URL_TWEET)
+            discord_notifier.notify_tweet(twitter_store_response=response)
+            print("Tweeted and notified on discord!\n")
+            # input("\n")
+            sleep(60 * 60 * 12)  # 12 hours
+        except Exception as e:
+            tb = traceback.format_exc()
+            discord_notifier = DiscordNotifier(url=URL_TWEET_LOGS)
+            discord_notifier.report_error(e, tb)
+            sleep(60 * 60 * 1)  # 1 hours
