@@ -3,6 +3,7 @@ import random as rd
 import traceback
 from emoji import emojize
 from time import sleep
+from datetime import datetime
 
 from utils.utils import (
     read_distrib_dict_from_file,
@@ -91,6 +92,7 @@ def generate_tweet():
 if __name__ == "__main__":
     while True:
         try:
+            print(f"{datetime.now().strftime('%d %B %Y - %H:%M')}\n")
             tw_store = TwitterStore()
             tweet_txt = generate_tweet()
             print(tweet_txt)
@@ -104,4 +106,5 @@ if __name__ == "__main__":
             tb = traceback.format_exc()
             discord_notifier = DiscordNotifier(url=URL_TWEET_LOGS)
             discord_notifier.report_error(e, tb)
+            print(tb)
             sleep(60 * 60 * 1)  # 1 hours
