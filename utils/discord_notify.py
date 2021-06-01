@@ -24,6 +24,10 @@ class DiscordNotifier:
         )
         webhook.execute()
 
+    def report_log_tmp(self, date, tb):
+        webhook = DiscordWebhook(url=self._url, content=f"Error caught on {date}{tb}")
+        webhook.execute()
+
     def report_error(self, exception, tb):
         embed = DiscordEmbed(
             title=f"Error {repr(exception)}",
@@ -36,8 +40,6 @@ class DiscordNotifier:
             },
             color="ff0000",
         )
-        webhook = DiscordWebhook(
-            url=self._url,
-        )
+        webhook = DiscordWebhook(url=self._url,)
         webhook.add_embed(embed)
         webhook.execute()

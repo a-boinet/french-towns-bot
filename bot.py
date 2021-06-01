@@ -90,9 +90,11 @@ def generate_tweet():
 
 
 if __name__ == "__main__":
+    date_str = None
     while True:
         try:
-            print(f"{datetime.now().strftime('%d %B %Y - %H:%M')}\n")
+            date_str = f"{datetime.now().strftime('%d %B %Y - %H:%M')}\n"
+            print(date_str)
             tw_store = TwitterStore()
             tweet_txt = generate_tweet()
             print(tweet_txt)
@@ -105,6 +107,6 @@ if __name__ == "__main__":
         except Exception as e:
             tb = traceback.format_exc()
             discord_notifier = DiscordNotifier(url=URL_TWEET_LOGS)
-            discord_notifier.report_error(e, tb)
+            discord_notifier.report_log_tmp(date_str, tb)
             print(tb)
             sleep(60 * 60 * 1)  # 1 hours
