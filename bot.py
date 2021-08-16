@@ -103,7 +103,7 @@ if __name__ == "__main__":
             discord_notifier.notify_tweet(twitter_store_response=response)
             print("Tweeted and notified on discord!\n")
             # input("\n")
-            sleep(60 * 60 * 12)  # 12 hours
+            sleep(60 * 60 * 24)  # 24 hours
         except Exception as e:
             tb = traceback.format_exc()
             discord_notifier = DiscordNotifier(url=URL_TWEET_LOGS)
