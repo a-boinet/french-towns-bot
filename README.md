@@ -5,7 +5,7 @@ A Twitter bot that creates french-sounding city names
 
 <a href="https://twitter.com/intent/follow?screen_name=FrenchTownsBot">
   <img src="https://img.shields.io/twitter/follow/FrenchTownsBot?style=social&logo=twitter"
-    alt="Follow this bot on Twitter">
+    alt="Follow this bot on Twitter" title="Follow this bot on Twitter">
 </a>
 
 ## Table of Contents
@@ -20,7 +20,7 @@ A Twitter bot that creates french-sounding city names
 
 First, let's install the required modules:
 ```bash
-python install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 In order to generate city names, the bot will need what I called *distribution dictionaries* (check out the [How it works](#how-it-works) section for more information).
@@ -31,8 +31,7 @@ Run the following script:
 python create_zlib_dicts.py
 ```
 
-To be able to post on Twitter, you must provide the bot with your Twitter API Tokens
-(otherwise you will get an error):
+To be able to post on Twitter, you must provide the bot with your Twitter API Tokens:
 ```bash
 nano utils/twitter_keys.txt
 ```
