@@ -15,6 +15,8 @@ from utils.discord_notify import DiscordNotifier, URL_TWEET, URL_TWEET_LOGS
 # from create_person import create_person
 from utils.twitter_store import TwitterStore
 
+
+# Some regions are commented because the lack of training material yields poor result
 REGION_DICT = {
     "Auvergne-Rhône-Alpes": [4189],
     "Bourgogne-Franche-Comté": [3831],
@@ -98,9 +100,9 @@ if __name__ == "__main__":
             tw_store = TwitterStore()
             tweet_txt = generate_tweet()
             print(tweet_txt)
-            response = tw_store.tweet(text_to_tweet=tweet_txt)
+            tweet_url = tw_store.tweet(text_to_tweet=tweet_txt)
             discord_notifier = DiscordNotifier(url=URL_TWEET)
-            discord_notifier.notify_tweet(twitter_store_response=response)
+            discord_notifier.notify_tweet(tweet_url=tweet_url)
             print("Tweeted and notified on discord!\n")
             # input("\n")
             sleep(60 * 60 * 24)  # 24 hours

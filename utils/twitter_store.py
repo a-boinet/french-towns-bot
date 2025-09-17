@@ -1,4 +1,5 @@
 import tweepy
+import random
 import pathlib
 
 try:
@@ -31,17 +32,21 @@ except:
 
 class TwitterStore:
     def __init__(self):
-        self.auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-        self.auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-        self.api = tweepy.API(self.auth)
+        self._client = tweepy.Client(
+            consumer_key=CONSUMER_KEY,
+            consumer_secret=CONSUMER_SECRET,
+            access_token=ACCESS_TOKEN,
+            access_token_secret=ACCESS_TOKEN_SECRET,
+        )
 
-    def tweet(self, text_to_tweet):
-        return self.api.update_status(text_to_tweet)
+    def tweet(self, text_to_tweet) -> str:
+        _response = self._client.create_tweet(text=text_to_tweet)
+        _tweet_url = f"https://x.com/twitter/status/{_response.data['id']}"
+        return _tweet_url
 
 
 if __name__ == "__main__":
     input("Press enter to send a test tweet\n")
     ts = TwitterStore()
-    response = ts.tweet("Hello world! This is a test")
-    tweet_url = f"https://twitter.com/twitter/statuses/{response.id_str}"
+    tweet_url = ts.tweet(f"Hello world! This is a test - {random.random()}")
     print(tweet_url)

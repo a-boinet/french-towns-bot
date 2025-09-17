@@ -5,11 +5,14 @@ import binascii
 import time
 import random as rd
 import regex as re
+
 from os import mkdir
 from collections import deque
 
 
+CWD = pathlib.Path(__file__).parent.absolute()
 ALPHABET_FR = " abcdefghijklmnopqrstuvwxyz-'àéâèêëîïôûüÿç"
+CONTEXT_LENGTH = 4
 FRENCH_CITIES_COUNT_BY_NAME_LENGTH = [
     1,
     15,
@@ -60,10 +63,8 @@ FRENCH_CITIES_COUNT_BY_NAME_LENGTH = [
 
 
 def get_list_from_file(file_name, separator="\n"):
-    return [
-        item.strip('"').strip("'")
-        for item in open(file_name, "r").read().split(separator)
-    ]
+    with open(file_name, "r") as f:
+        return [item.strip('"').strip("'") for item in f.read().split(separator)]
 
 
 def write_distrib_dict_to_file(file_path, distrib_dict):
@@ -73,6 +74,15 @@ def write_distrib_dict_to_file(file_path, distrib_dict):
     file = open(file_path, "wb")
     file.write(compressed_data)
     file.close()
+
+
+def read_distrib_dict_from_file(file_name):
+    file = open(file_name, "rb")
+    compressed_data = file.read()
+    decompressed_data = zlib.decompress(compressed_data)
+    decompressed_data = binascii.unhexlify(decompressed_data).decode("utf8")
+    decompressed_data = json.loads(decompressed_data)
+    return decompressed_data
 
 
 def generate_distrib_dict(name_list, file_path, alphabet=ALPHABET_FR):
@@ -86,15 +96,14 @@ def generate_distrib_dict(name_list, file_path, alphabet=ALPHABET_FR):
     """
     print("Running...")
     distrib_dict = {}
-    n = len(alphabet)
-    for i in range(n):
-        distrib_dict[alphabet[i]] = {}
-        for j in range(n):
-            distrib_dict[alphabet[i]][alphabet[j]] = {}
-            for k in range(n):
-                distrib_dict[alphabet[i]][alphabet[j]][alphabet[k]] = {}
-                for l in range(n):
-                    distrib_dict[alphabet[i]][alphabet[j]][alphabet[k]][alphabet[l]] = 0
+    for letter_1 in alphabet:
+        distrib_dict[letter_1] = {}
+        for letter_2 in alphabet:
+            distrib_dict[letter_1][letter_2] = {}
+            for letter_3 in alphabet:
+                distrib_dict[letter_1][letter_2][letter_3] = {}
+                for letter_4 in alphabet:
+                    distrib_dict[letter_1][letter_2][letter_3][letter_4] = 0
     for name in name_list:
         idx = deque([" ", " ", " ", " "])
         name += "   "
@@ -103,89 +112,93 @@ def generate_distrib_dict(name_list, file_path, alphabet=ALPHABET_FR):
             idx.append(character)
             distrib_dict[idx[0]][idx[1]][idx[2]][idx[3]] += 1
     json_dict = json.dumps(distrib_dict)
-    try:
-        mkdir(
-            f"{pathlib.Path(__file__).parent.absolute()}/../resources/regions_france_dict"
-        )
-    except FileExistsError:
-        pass
-    print("Generation done, writing file\n")
-    write_distrib_dict_to_file(
-        file_path=file_path, distrib_dict=json_dict,
-    )
+    # try:
+    #     mkdir(
+    #         f"{CWD}/../resources/regions_france_dict"
+    #     )
+    # except FileExistsError:
+    #     pass
+    # print("Generation done, writing file\n")
+    # write_distrib_dict_to_file(
+    #     file_path=file_path, distrib_dict=json_dict,
+    # )
 
 
-def read_distrib_dict_from_file(file_name):
-    file = open(file_name, "rb")
-    compressed_data = file.read()
-    decompressed_data = zlib.decompress(compressed_data)
-    decompressed_data = binascii.unhexlify(decompressed_data).decode("utf8")
-    decompressed_data = json.loads(decompressed_data)
-    return decompressed_data
-
-
-def is_correct(word, name_list_source=None, fr_dict=None):
+def is_correct(name, name_list_source=None, fr_dict=None):
     """
-    Helps finding out if name sounds french or not
+    Try to find out if `name` sounds french or not
+    :param name: The name we want to validate
     :returns: True or False
     """
-    word = word.lower()
-    pattern_word = " " + word + " "
-    if name_list_source is None:
-        name_list_source = []
-    if fr_dict is None:
-        fr_dict = []
+    name = name.lower()
+    if (
+        name.startswith("x")  # Doesn't sound french
+        or len(name) <= 4  # Too short
+        or len(name) >= 30  # Too long
+        or name.count("-") >= 5  # To many words
+    ):
+        return False
+    if name_list_source is not None and name in name_list_source:
+        # Already exists!
+        return False
+    if fr_dict is not None and name in fr_dict:
+        # This is just a french word
+        return False
     # Must be 4 letters or more
     forbidden_words = (
         open(
-            f"{pathlib.Path(__file__).parent.absolute()}/../resources/forbidden_words.txt",
+            f"{CWD}/../resources/forbidden_words.txt",
             "r",
         )
         .read()
         .split("\n")
     )
     forbidden_words.pop()
+    if name in forbidden_words:
+        return False
+
     forbidden_patterns = (
         open(
-            f"{pathlib.Path(__file__).parent.absolute()}/../resources/forbidden_patterns.txt",
+            f"{CWD}/../resources/forbidden_patterns.txt",
             "r",
         )
         .read()
         .split("\n")
     )
     forbidden_patterns.pop()
+
+    # Already tweeted
     try:
-        already_tweeted = (
-            open(
-                f"{pathlib.Path(__file__).parent.absolute()}/../resources/already_tweeted.txt",
-                "r",
+        already_tweeted = {
+            w.lower()
+            for w in set(
+                open(
+                    f"{CWD}/../resources/already_tweeted.txt",
+                    "r",
+                )
+                .read()
+                .split("\n")
             )
-            .read()
-            .split("\n")
-        )
-        already_tweeted = [w.lower() for w in already_tweeted]
+        }
     except:
-        already_tweeted = []
-    contains_forbidden_pattern = False
+        already_tweeted = set()
+    if name in already_tweeted:
+        return False
+
+    # Forbidden patterns
+    pattern_word = " " + name + " "
     for fp in forbidden_patterns:
         if fp in pattern_word:
-            contains_forbidden_pattern = True
-    contains_long_word = False
-    for chunk in word.split("-"):
+            # Contains a forbidden pattern
+            return False
+
+    # Long words inside name
+    for chunk in name.split("-"):
         if len(chunk) > 12:
-            contains_long_word = True
-    return (
-        word not in forbidden_words
-        and word not in name_list_source
-        and word not in fr_dict
-        and word not in already_tweeted
-        and not contains_forbidden_pattern
-        and not contains_long_word
-        and not word.startswith("x")  # Doesn't sound french
-        and len(word) < 30
-        and len(word) > 4
-        and word.count("-") < 5
-    )
+            # Contains a long word
+            return False
+
+    return True
 
 
 def intersperse(lst, item):
@@ -219,7 +232,7 @@ def reformat_string(v_string):
     final_string = re.sub(r"(.+?)\1+", r"\1", final_string)
     replace_list = (
         open(
-            f"{pathlib.Path(__file__).parent.absolute()}/../resources/replace_patterns.txt",
+            f"{CWD}/../resources/replace_patterns.txt",
             "r",
         )
         .read()
@@ -237,7 +250,7 @@ def create_words(
     distrib_dict, name_list_source=None, mean_length=12, number_of_words=100, seed=None
 ):
     fr_dict_list = open(
-        f"{pathlib.Path(__file__).parent.absolute()}/../resources/french-dictionary.txt",
+        f"{CWD}/../resources/french-dictionary.txt",
         "r",
     ).read()
     fr_dict_list = fr_dict_list.split("\n")
@@ -273,11 +286,11 @@ def create_words(
                 counter += 1
             new_name = reformat_string(word)
             if is_correct(
-                word=new_name, name_list_source=name_list_source, fr_dict=fr_dict_list
+                name=new_name, name_list_source=name_list_source, fr_dict=fr_dict_list
             ):
                 words.append(new_name)
                 with open(
-                    f"{pathlib.Path(__file__).parent.absolute()}/../resources/already_tweeted.txt",
+                    f"{CWD}/../resources/already_tweeted.txt",
                     "a",
                 ) as file:
                     file.write(f"{new_name}\n")

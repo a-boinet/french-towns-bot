@@ -17,11 +17,8 @@ class DiscordNotifier:
     def __init__(self, url):
         self._url = url
 
-    def notify_tweet(self, twitter_store_response):
-        webhook = DiscordWebhook(
-            url=self._url,
-            content=f"https://twitter.com/twitter/statuses/{twitter_store_response.id_str}",
-        )
+    def notify_tweet(self, tweet_url: str):
+        webhook = DiscordWebhook(url=self._url, content=tweet_url)
         webhook.execute()
 
     def report_log_tmp(self, date, tb):
@@ -40,6 +37,8 @@ class DiscordNotifier:
             },
             color="ff0000",
         )
-        webhook = DiscordWebhook(url=self._url,)
+        webhook = DiscordWebhook(
+            url=self._url,
+        )
         webhook.add_embed(embed)
         webhook.execute()
