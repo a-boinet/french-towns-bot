@@ -92,6 +92,7 @@ def generate_tweet():
 
 
 if __name__ == "__main__":
+    # We run it only once, a systemd timer should be used to run it periodically
     date_str = None
     while True:
         try:
@@ -100,15 +101,17 @@ if __name__ == "__main__":
             tw_store = TwitterStore()
             tweet_txt = generate_tweet()
             print(tweet_txt)
+            # Tweet the town of the day!
             tweet_url = tw_store.tweet(text_to_tweet=tweet_txt)
-            discord_notifier = DiscordNotifier(url=URL_TWEET)
-            discord_notifier.notify_tweet(tweet_url=tweet_url)
-            print("Tweeted and notified on discord!\n")
-            # input("\n")
-            sleep(60 * 60 * 24)  # 24 hours
-        except Exception as e:
+            break
+        except Exception as e:  # NOQA
             tb = traceback.format_exc()
             discord_notifier = DiscordNotifier(url=URL_TWEET_LOGS)
             discord_notifier.report_log_tmp(date_str, tb)
             print(tb)
-            sleep(60 * 60 * 1)  # 1 hours
+            sleep(60 * 60 * 1)  # 1 hour
+
+    # Notify on discord
+    discord_notifier = DiscordNotifier(url=URL_TWEET)
+    discord_notifier.notify_tweet(tweet_url=tweet_url)
+    print("Tweeted and notified on discord!\n")
