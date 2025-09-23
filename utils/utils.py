@@ -112,16 +112,15 @@ def generate_distrib_dict(name_list, file_path, alphabet=ALPHABET_FR):
             idx.append(character)
             distrib_dict[idx[0]][idx[1]][idx[2]][idx[3]] += 1
     json_dict = json.dumps(distrib_dict)
-    # try:
-    #     mkdir(
-    #         f"{CWD}/../resources/regions_france_dict"
-    #     )
-    # except FileExistsError:
-    #     pass
-    # print("Generation done, writing file\n")
-    # write_distrib_dict_to_file(
-    #     file_path=file_path, distrib_dict=json_dict,
-    # )
+    try:
+        mkdir(f"{CWD}/../resources/regions_france_dict")
+    except FileExistsError:
+        pass
+    print("Generation done, writing file\n")
+    write_distrib_dict_to_file(
+        file_path=file_path,
+        distrib_dict=json_dict,
+    )
 
 
 def is_correct(name, name_list_source=None, fr_dict=None):
