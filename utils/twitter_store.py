@@ -10,7 +10,7 @@ if not os.path.exists(KEYS_FILE):
     error_msg = (
         f"\n\n\033[1m\033[91m[ERROR] {KEYS_FILE} not found\033[0m\n\n"
         f"\033[91mIt looks like you didn't create 'utils/twitter_keys.txt' "
-        f"(see README.md for expected format)\033[0m"
+        f"(see README.md for expected format)\033[0m\n"
     )
     raise FileNotFoundError(error_msg)
 
@@ -19,11 +19,16 @@ try:
         for line in f.readlines():
             k, v = line.removesuffix("\n").split("=")
             KEYS_DICT[k] = v.strip('"').strip("'")
+    assert "CONSUMER_KEY" in KEYS_DICT.keys(), "Missing 'CONSUMER_KEY'"
+    assert "CONSUMER_SECRET" in KEYS_DICT.keys(), "Missing 'CONSUMER_SECRET'"
+    assert "ACCESS_TOKEN" in KEYS_DICT.keys(), "Missing 'ACCESS_TOKEN'"
+    assert "ACCESS_TOKEN_SECRET" in KEYS_DICT.keys(), "Missing 'ACCESS_TOKEN_SECRET'"
 except:  # NOQA
     error_msg = (
         "\n\n\033[1m\033[91m[ERROR] Couldn't retrieve Twitter API Tokens\033[0m\n\n"
-        "\033[91mIs the format compliant with README.md instructions?\033[0m"
+        "\033[91mIs the format compliant with README.md instructions?\033[0m\n"
     )
+    raise Exception(error_msg)
 
 
 class TwitterStore:
@@ -42,10 +47,10 @@ class TwitterStore:
 
 
 if __name__ == "__main__":
-    input_value = input("Type 'yes' or 'y' to send a test tweet\n")
+    ts = TwitterStore()
+    input_value = input("Type 'yes' or 'y' to send a test tweet: ")
     if input_value.lower() in ["y", "yes"]:
-        ts = TwitterStore()
         tweet_url = ts.tweet(f"Hello world! This is a test - {random.random()}")
         print(tweet_url)
     else:
-        print("Test tweet not sent")
+        print("Ok, test tweet not sent")
