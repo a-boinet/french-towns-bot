@@ -43,6 +43,17 @@ ACCESS_TOKEN=your_ACCESS_TOKEN_here
 ACCESS_TOKEN_SECRET=your_ACCESS_TOKEN_SECRET_here
 ```
 
+You can connect the bot to a discord channel in order to get notified for new tweets and errors:
+```bash
+nano utils/discord_url.txt
+```
+The expected format for `utils/discord_url.txt` is:
+```bash (not actually bash, but easier to read)
+TWEET_LOG_URL=your_DISCORD_WEBHOOK_here
+ERROR_LOG_URL=your_DISCORD_WEBHOOK_here
+```
+
+
 ## Run
 
 ```bash
@@ -51,7 +62,7 @@ python bot.py
 
 ## How it works
 
-TODO
+Inspired by this video: https://www.youtube.com/watch?v=YsR7r2378j0
 
 ## Git hook installation
 

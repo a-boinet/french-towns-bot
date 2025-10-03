@@ -1,6 +1,7 @@
 import pathlib
 import random as rd
 import traceback
+
 from emoji import emojize
 from time import sleep
 from datetime import datetime
@@ -10,9 +11,8 @@ from utils.utils import (
     get_list_from_file,
     create_words,
 )
-from utils.discord_notify import DiscordNotifier, URL_TWEET, URL_TWEET_LOGS
+from utils.discord_notify import DiscordNotifier
 
-# from create_person import create_person
 from utils.twitter_store import TwitterStore
 
 
@@ -51,7 +51,6 @@ def generate_tweet():
         - A city name
         - The region where it is situated
         - Its population
-        # - A mayor
     """
     # Region
     region = rd.choices(
@@ -67,7 +66,8 @@ def generate_tweet():
             + ".zlib"
         )
     except:
-        msg = f"\n\n\033[1m\033[91m[ERROR] Couldn't read distribution dictionary for {region}\033[0m\n\n"
+        msg = f"\n\n\033[1m\033[91m\033[1m\033[91m[ERROR]\033[0m "
+        msg += f"Couldn't read distribution dictionary for {region}\033[0m\n\n"
         msg += "\033[91mDid you forget to run 'create_zlib_dicts.py'?\033[0m"
         raise Exception(msg)
     name_list = get_list_from_file(
@@ -83,17 +83,16 @@ def generate_tweet():
     population = round(rd.expovariate(lambd=POPULATION_LAMBDA) + 1)
     ret_str += emojize(f":man: {population} habitants")
 
-    # # Mayor
-    # mayor = create_person()
-    # titre = "M." if mayor.gender == 1 else "Mme."
-    # print(f"{titre} {mayor.prenom} {mayor.nom}, {mayor.age} ans")
-
     return ret_str
 
 
 if __name__ == "__main__":
     # We run it only once, a systemd timer should be used to run it periodically
     date_str = None
+    try:
+        discord_notifier = DiscordNotifier()
+    except Exception as e:  # NOQA
+        discord_notifier = None
     while True:
         try:
             date_str = f"{datetime.now().strftime('%d %B %Y - %H:%M')}\n"
@@ -103,15 +102,30 @@ if __name__ == "__main__":
             print(tweet_txt)
             # Tweet the town of the day!
             tweet_url = tw_store.tweet(text_to_tweet=tweet_txt)
+            print(f"Tweet sent successfully! ({tweet_url})")
             break
         except Exception as e:  # NOQA
             tb = traceback.format_exc()
-            discord_notifier = DiscordNotifier(url=URL_TWEET_LOGS)
-            discord_notifier.report_log_tmp(date_str, tb)
+            try:
+                discord_notifier.log_error(date_str, tb)
+                print("Error notified on discord\n")
+            except Exception as e:  # NOQA
+                print(
+                    "\033[1m\033[91m[ERROR]\033[0m Could not notify error on discord!"
+                )
+                if discord_notifier is None:
+                    print("\t`discord_notifier` is `None`")
             print(tb)
-            sleep(60 * 60 * 1)  # 1 hour
+            sleep(30 * 60 * 1)  # 30 minutes
 
     # Notify on discord
-    discord_notifier = DiscordNotifier(url=URL_TWEET)
-    discord_notifier.notify_tweet(tweet_url=tweet_url)
-    print("Tweeted and notified on discord!\n")
+    try:
+        discord_notifier.notify_tweet(tweet_url=tweet_url)
+        print("Tweet notified on discord\n")
+    except Exception as e:  # NOQA
+        print("\033[1m\033[91m[ERROR]\033[0m Could not notify tweet on discord!")
+        if discord_notifier is None:
+            print("\t`discord_notifier` is `None`")
+        else:
+            tb = traceback.format_exc()
+            print(tb)

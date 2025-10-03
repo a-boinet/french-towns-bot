@@ -1,31 +1,51 @@
+import os
 import pathlib
+import warnings
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
-with open(f"{pathlib.Path(__file__).parent.absolute()}/discord_url.txt", "r") as file:
-    lines = file.readlines()
+URL_FILE = f"{pathlib.Path(__file__).parent.absolute()}/discord_url.txt"
+URL_DICT: dict[str, str] = {}
 
-URL_TWEET = lines[0].strip("\n").split("=")
-assert URL_TWEET[0] == "TWEET", "Bad format for TWEET webhook"
-URL_TWEET = URL_TWEET[1].strip('"')
-
-URL_TWEET_LOGS = lines[1].strip("\n").split("=")
-assert URL_TWEET_LOGS[0] == "TWEET_LOGS", "Bad format for TWEET_LOGS webhook"
-URL_TWEET_LOGS = URL_TWEET_LOGS[1].strip('"')
+if not os.path.exists(URL_FILE):
+    error_msg = (
+        f"\n\n\033[1m\033[91m[ERROR] {URL_FILE} not found\033[0m\n\n"
+        f"\033[91mIt looks like you didn't create 'utils/discord_url.txt' "
+        f"(see README.md for expected format)\033[0m\n"
+    )
+    warnings.warn(error_msg, Warning)
+else:
+    try:
+        with open(URL_FILE, "r") as f:
+            for line in f.readlines():
+                k, v = line.removesuffix("\n").split("=")
+                URL_DICT[k] = v.strip('"').strip("'")
+        assert "TWEET_LOG_URL" in URL_DICT.keys(), "Missing 'TWEET_LOG_URL'"
+        assert "ERROR_LOG_URL" in URL_DICT.keys(), "Missing 'ERROR_LOG_URL'"
+    except:  # NOQA
+        error_msg = (
+            "\n\n\033[1m\033[91m[ERROR] Couldn't retrieve Discord URL\033[0m\n\n"
+            "\033[91mIs the format compliant with README.md instructions?\033[0m\n"
+        )
+        warnings.warn(error_msg, SyntaxWarning)
 
 
 class DiscordNotifier:
-    def __init__(self, url):
-        self._url = url
+    def __init__(self):
+        self._tweet_log_url = URL_DICT["TWEET_LOG_URL"]
+        self._error_log_url = URL_DICT["ERROR_LOG_URL"]
 
     def notify_tweet(self, tweet_url: str):
-        webhook = DiscordWebhook(url=self._url, content=tweet_url)
+        webhook = DiscordWebhook(url=self._tweet_log_url, content=tweet_url)
         webhook.execute()
 
-    def report_log_tmp(self, date, tb):
-        webhook = DiscordWebhook(url=self._url, content=f"Error caught on {date}{tb}")
+    def log_error(self, date, tb):
+        webhook = DiscordWebhook(
+            url=self._error_log_url, content=f"Error caught on {date}{tb}"
+        )
         webhook.execute()
 
     def report_error(self, exception, tb):
+        # TODO Continue (?)
         embed = DiscordEmbed(
             title=f"Error {repr(exception)}",
             footer={
