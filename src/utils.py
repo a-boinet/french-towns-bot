@@ -12,7 +12,6 @@ from collections import deque
 
 CWD = pathlib.Path(__file__).parent.absolute()
 ALPHABET_FR = " abcdefghijklmnopqrstuvwxyz-'àéâèêëîïôûüÿç"
-CONTEXT_LENGTH = 4
 FRENCH_CITIES_COUNT_BY_NAME_LENGTH = [
     1,
     15,

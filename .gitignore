@@ -4,3 +4,4 @@ already_tweeted.txt
 **regions_france_dict
 **__pycache__
 .idea
+.vscode
