@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 from src.config import Config
 
@@ -9,7 +10,7 @@ with open(Config.RESOURCES_DIR / "replace_patterns.txt", "r") as f:
     ]
 
 
-def intersperse(lst, item):
+def intersperse(lst: list, item: Any):
     """
     Adapted from Stack Overflow
     https://stackoverflow.com/a/6300649/

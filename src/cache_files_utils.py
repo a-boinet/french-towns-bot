@@ -90,7 +90,9 @@ def get_empty_distribution_dict(alphabet: str, context_length: int) -> dict:
     return d
 
 
-def generate_distribution_dict(word_list) -> tuple[dict, str, dict[int, int]]:
+def generate_distribution_dict(
+    word_list: list[str],
+) -> tuple[dict, str, dict[int, int]]:
     alphabet = get_alphabet_from_word_list(word_list)
     distribution_dict = get_empty_distribution_dict(
         alphabet, context_length=Config.CONTEXT_LENGTH
