@@ -23,12 +23,6 @@ First, let's install the required modules:
 pip install -r requirements.txt
 ```
 
-If you just want to try the name generation, you can run
-
-```bash
-python playground.py
-```
-
 To be able to post on Twitter, you must provide the bot with your Twitter API Tokens:
 ```bash
 nano keys.txt  # Create the file in the root directory
@@ -51,6 +45,10 @@ ERROR_LOG_URL=your_DISCORD_WEBHOOK_here
 ## Run
 
 ```bash
+# If you just want to try the name generation
+python playground.py
+
+# If you want to run the bot and post the generated name on Twitter
 python bot.py
 ```
 
