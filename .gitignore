@@ -1,7 +1,7 @@
-twitter_keys.txt
-discord_url.txt
+keys.txt
 already_tweeted.txt
-**regions_france_dict
+**cache
 **__pycache__
 .idea
 .vscode
+result.json

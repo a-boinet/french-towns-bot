@@ -23,19 +23,17 @@ First, let's install the required modules:
 pip install -r requirements.txt
 ```
 
-In order to generate city names, the bot will need what I called *distribution dictionaries* (check out the [How it works](#how-it-works) section for more information).
-
-Run the following script:
+If you just want to try the name generation, you can run
 
 ```bash
-python create_zlib_dicts.py
+python playground.py
 ```
 
 To be able to post on Twitter, you must provide the bot with your Twitter API Tokens:
 ```bash
-nano utils/twitter_keys.txt
+nano keys.txt  # Create the file in the root directory
 ```
-The expected format for `utils/twitter_keys.txt` is:
+The expected format for `keys.txt` is:
 ```bash (not actually bash, but easier to read)
 CONSUMER_KEY=your_CONSUMER_KEY_here
 CONSUMER_SECRET=your_CONSUMER_SECRET_here
@@ -43,11 +41,7 @@ ACCESS_TOKEN=your_ACCESS_TOKEN_here
 ACCESS_TOKEN_SECRET=your_ACCESS_TOKEN_SECRET_here
 ```
 
-You can connect the bot to a discord channel in order to get notified for new tweets and errors:
-```bash
-nano utils/discord_url.txt
-```
-The expected format for `utils/discord_url.txt` is:
+_Optional:_ You can connect the bot to a discord channel in order to get notified for new tweets and errors. You can add the webhook URLs to `keys.txt`. The expected format is:
 ```bash (not actually bash, but easier to read)
 TWEET_LOG_URL=your_DISCORD_WEBHOOK_here
 ERROR_LOG_URL=your_DISCORD_WEBHOOK_here
@@ -73,3 +67,5 @@ If you're planning on contributing to this project, you can enable the pre-commi
 
 ## License
 Usage is provided under the [GPL-3.0 License ](https://www.gnu.org/licenses/gpl-3.0.en.html). See LICENSE for the full details.
+
+The file [`french_dictionary.txt`](./resources/french_dictionary.txt) was adapted from [French-Dictionary](https://github.com/hbenbel/French-Dictionary) (under MIT License), by [Hussem Ben Belgacem](https://github.com/hbenbel).
