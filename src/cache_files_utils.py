@@ -4,6 +4,7 @@ import os
 import time
 import zlib
 from collections import deque
+from functools import lru_cache
 from pathlib import Path
 
 try:
@@ -134,6 +135,7 @@ def write_data_to_file(data: dict, file_path: Path, compress_data: bool = True):
         f.write(data_to_write)
 
 
+@lru_cache(maxsize=None)
 def read_data_from_file(file_path: Path, data_is_compressed: bool = True) -> dict:
     with open(file_path, "rb" if data_is_compressed else "r") as f:
         data = f.read()
