@@ -1,7 +1,7 @@
 import random
 import tweepy
 
-from src.config import Keys
+from src.keys import Keys
 
 
 def send_tweet(text_to_tweet: str) -> str:

@@ -2,7 +2,7 @@ import warnings
 
 from discord_webhook import DiscordWebhook
 
-from src.config import Keys
+from src.keys import Keys
 
 
 class DiscordNotifier:
