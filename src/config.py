@@ -13,7 +13,7 @@ class Config:
     POPULATION_LAMBDA: float = 0.0009
     MIN_CITY_LENGTH: int = 4
     MAX_CITY_LENGTH: int = 30
-    MAX_WORD_LENGTH: int = 12
+    MAX_WORD_LENGTH: int = 14
     WAIT_TIME_BEFORE_RETRY: int = 1800  # 1800 sec -> 30 min
 
     def __post_init__(self):  # NOQA

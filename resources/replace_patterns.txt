@@ -25,3 +25,13 @@ la Rivières,la Rivière
 du-Mer,sur-Mer
 de-Mer,sur-Mer
 le-Mer,sur-Mer
+-lès-sous-,-lès-
+-sous-lès-,-sous-
+-en-sur-,-en-
+-sur-en-,-sur-
+-Loire,-sur-Loire
+-Seine,-sur-Seine
+-Rhône,-sur-Rhône
+-Garonne,-sur-Garonne
+-Rhin,-sur-Rhin
+-Somme,-sur-Somme

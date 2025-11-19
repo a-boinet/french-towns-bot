@@ -47,13 +47,13 @@ def reformat_name(name: str):
     for word in words_3:
         final_name += word.capitalize()
 
-    # Delete repeating patterns
-    # (longer than two letters, to preserve double letters in words)
-    final_name = re.sub(r"(.{2,}?)\1+", r"\1", final_name)
-
     # Replace some common patterns
     for pattern in REPLACE_PATTERNS:
         final_name = final_name.replace(pattern[0], pattern[1])
+
+    # Delete repeating patterns
+    # (longer than two letters, to preserve double letters in words)
+    final_name = re.sub(r"(.{2,}?)\1+", r"\1", final_name)
 
     # We have the final string!
     return final_name
