@@ -50,8 +50,12 @@ def get_cache_file_path_from_region_name(region_name: str) -> Path:
     return Config.CACHE_DIR / f"{region_name}.zlib"
 
 
+def get_cities_path_from_region_name(region_name: str) -> Path:
+    return Config.BASE_DIR / f"resources/cities_by_region/{region_name}.txt"
+
+
 def generate_and_save_cache_for_region(region_name: str) -> dict:
-    with open(Config.BASE_DIR / f"resources/cities_by_region/{region_name}.txt") as f:
+    with open(get_cities_path_from_region_name(region_name)) as f:
         # Get the cities list
         cities_list = [city.strip().lower() for city in f.readlines()]
     # Generate the statistical distribution for this region

@@ -1,3 +1,4 @@
+# Lower case looks better for these
 D',d'
 L',l'
 -Et-,-et-
@@ -11,6 +12,7 @@ L',l'
 -Lès-,-lès-
 -Sur-,-sur-
 -Sous-,-sous-
+# Common words in french city names
 Sain-,Saint-
 Abaye,Abbaye
 vile,ville
@@ -22,6 +24,7 @@ Frere,Frère
 La Mesnil,Le Mesnil
 la-Rivières,la-Rivière
 la Rivières,la Rivière
+# Sounds better
 du-Mer,sur-Mer
 de-Mer,sur-Mer
 le-Mer,sur-Mer
@@ -29,9 +32,3 @@ le-Mer,sur-Mer
 -sous-lès-,-sous-
 -en-sur-,-en-
 -sur-en-,-sur-
--Loire,-sur-Loire
--Seine,-sur-Seine
--Rhône,-sur-Rhône
--Garonne,-sur-Garonne
--Rhin,-sur-Rhin
--Somme,-sur-Somme

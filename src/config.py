@@ -14,6 +14,8 @@ class Config:
     MIN_CITY_LENGTH: int = 4
     MAX_CITY_LENGTH: int = 30
     MAX_WORD_LENGTH: int = 14
+    MAX_WORD_COUNT: int = 5
+    MAX_REPLACE_ATTEMPT: int = 20
     WAIT_TIME_BEFORE_RETRY: int = 1800  # 1800 sec -> 30 min
 
     def __post_init__(self):  # NOQA

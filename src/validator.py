@@ -1,11 +1,15 @@
+import os.path
 from pathlib import Path
 
 from src.config import Config
+from src.cache_files_utils import get_cities_path_from_region_name
 
 
 def load_words_from_file(file_path: Path) -> set[str]:
     with open(file_path, "r") as f:
-        words = {word.strip().lower() for word in f.readlines()}
+        words = {
+            word.removesuffix("\n").removesuffix(",").lower() for word in f.readlines()
+        }
     return words
 
 
@@ -20,10 +24,11 @@ except FileNotFoundError:
     ALREADY_TWEETED: set[str] = set()
 
 
-def is_valid(name: str) -> bool:
+def is_valid(name: str, region_name: str = None) -> bool:
     """
     Try to find out if `name` sounds french or not
     :param name: The name we want to validate
+    :param region_name: Optional, the region it's in
     :returns: True or False
     """
     name_lower = name.lower()
@@ -32,18 +37,26 @@ def is_valid(name: str) -> bool:
         len(name_lower) < Config.MIN_CITY_LENGTH  # Too short
         or len(name_lower) > Config.MAX_CITY_LENGTH  # Too long
         or name_lower.startswith("x")  # Doesn't sound french
-        or name_lower.count("-") >= 5  # To many words
+        or name_lower.count("-") >= Config.MAX_WORD_COUNT  # To many words
+        or name_lower.startswith("-")
+        or name_lower.endswith("-")
     ):
         return False
 
     # Long words inside name
-    for chunk in name_lower.split("-"):
+    for chunk in name_lower.replace("'", " ").replace("-", " ").split(" "):
         if len(chunk) > Config.MAX_WORD_LENGTH:
             # Contains a long word
             return False
 
-    # Forbidden words, French words and names already tweeted
-    for words in [FORBIDDEN_WORDS, FRENCH_DICTIONARY, ALREADY_TWEETED]:
+    EXISTING_CITIES = set()  # NOQA
+    if region_name is not None:
+        region_cities_file_path = get_cities_path_from_region_name(region_name)
+        if os.path.exists(region_cities_file_path):
+            EXISTING_CITIES = load_words_from_file(region_cities_file_path)  # NOQA
+
+    # Forbidden words, French words, names already tweeted, and cities that already exist
+    for words in [FORBIDDEN_WORDS, FRENCH_DICTIONARY, ALREADY_TWEETED, EXISTING_CITIES]:
         if name_lower in words:
             return False
 

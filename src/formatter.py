@@ -6,7 +6,9 @@ from src.config import Config
 
 with open(Config.RESOURCES_DIR / "replace_patterns.txt", "r") as f:
     REPLACE_PATTERNS: list[list[str]] = [
-        pattern.strip().split(",") for pattern in f.readlines()
+        pattern.removesuffix("\n").split(",")
+        for pattern in f.readlines()
+        if not pattern.startswith("#")
     ]
 
 
@@ -49,7 +51,16 @@ def reformat_name(name: str):
 
     # Replace some common patterns
     for pattern in REPLACE_PATTERNS:
-        final_name = final_name.replace(pattern[0], pattern[1])
+        for _ in range(Config.MAX_REPLACE_ATTEMPT):
+            # For loop needed because of some patterns
+            # (like two consecutive '-Sur-' not being replaced correctly)
+            final_name_edited = final_name.replace(pattern[0], pattern[1])
+            if final_name != final_name_edited:
+                final_name = final_name_edited
+                continue
+            break
+        else:
+            raise Exception(f"Invalid replace pattern: {pattern}")
 
     # Delete repeating patterns
     # (longer than two letters, to preserve double letters in words)

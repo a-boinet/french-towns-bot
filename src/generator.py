@@ -51,6 +51,7 @@ def generate_new_city_name():
         region_cache = get_random_region()
         cities_count_by_name_length = region_cache["cities_count_by_name_length"]
         distribution_dict = region_cache["distribution_dict"]
+        region_name = region_cache["region_name"]
         min_name_length: int = rd.choices(
             population=[int(pop) for pop in cities_count_by_name_length.keys()],
             weights=list(cities_count_by_name_length.values()),
@@ -75,7 +76,7 @@ def generate_new_city_name():
             if next_letter == " " and (city_name[-1] == " " or idx >= min_name_length):
                 # We're done, time to stop this iteration
                 final_name = reformat_name(city_name)
-                if is_valid(final_name):
+                if is_valid(final_name, region_name=region_name):
                     # We have a valid name!
                     city_name = final_name
                     continue_generation = False
@@ -86,7 +87,7 @@ def generate_new_city_name():
             letters_queue.append(next_letter)
             letters_queue.popleft()
 
-    return city_name, region_cache["region_name"]  # NOQA
+    return city_name, region_name  # NOQA
 
 
 def generate_tweet():
