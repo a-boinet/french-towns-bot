@@ -7,6 +7,7 @@ PAIR_TO_TEST = [
     ("l'aDResse-SuR-MeR", "l'Adresse-sur-Mer"),
     ("saint-martin", "Saint-Martin"),
     ("Ville-sur-SuR-sUr-sur-Sur-seine", "Ville-sur-Seine"),
+    ("Ville-De-Seines-sUr-Loires", "Ville-de-Seine-sur-Loire"),
 ]
 
 

@@ -17,6 +17,7 @@ NAMES_TO_TEST = [
     ("Ville-sur-sur-mer", False),  # Double "-sur-"
     ("Ville-sur-mer", True),
     ("l'Adresse-sur-Mer", True),
+    ("Cherpinay-les-sur-Seine", False),
     ("Shit", False),  # Forbidden word
     ("Fromage", False),  # French word
 ]
@@ -27,7 +28,7 @@ NAMES_TO_TEST = [
     NAMES_TO_TEST,
     ids=[v[0] for v in NAMES_TO_TEST],
 )
-def test_string_reformating(name, name_is_valid):
+def test_string_validator(name, name_is_valid):
     assert (
         is_valid(name) == name_is_valid
     ), f"The name {name} is actually {'valid' if is_valid(name) else 'invalid'}!"
