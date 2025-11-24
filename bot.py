@@ -9,18 +9,15 @@ from src.twitter_service import send_tweet
 from src.discord_service import DiscordNotifier
 from src.validator import save_city_name
 
+
 if __name__ == "__main__":
     # We run it only once.
-    # A systemd timer / cron job should be used to run it periodically
-    date_str = None
-    try:
-        discord_notifier = DiscordNotifier()
-    except:  # NOQA
-        discord_notifier = None
+    # A systemd timer / cron job should be used to run it periodically.
     while True:
+        date_str = f"{datetime.now().strftime('%d %B %Y - %H:%M')}"
+        print(date_str, "\n")
         try:
-            date_str = f"{datetime.now().strftime('%d %B %Y - %H:%M')}"
-            print(date_str, "\n")
+            # Generate city name
             tweet_txt, city_name, _, _ = generate_tweet()
             print(tweet_txt)
             # Tweet the town of the day!
@@ -30,28 +27,21 @@ if __name__ == "__main__":
             # to the `already_tweeted.txt` file (so we don't tweet it twice)
             save_city_name(city_name)
             break
-        except Exception as e:  # NOQA
+        except:  # NOQA
             tb = traceback.format_exc()
             try:
-                discord_notifier.log_error(date_str, tb)
+                DiscordNotifier.log_error(date_str, tb)
                 print("Error notified on discord\n")
-            except Exception as e:  # NOQA
+            except:  # NOQA
                 print(
                     "\033[1m\033[91m[ERROR]\033[0m Could not notify error on discord!"
                 )
-                if discord_notifier is None:
-                    print("\t`discord_notifier` is `None`")
             print(tb)
             sleep(Config.WAIT_TIME_BEFORE_RETRY)  # 30 minutes
 
     # Notify on discord
     try:
-        discord_notifier.notify_tweet(tweet_url=tweet_url)
+        DiscordNotifier.notify_tweet(tweet_url=tweet_url)
         print("Tweet notified on discord\n")
-    except Exception as e:  # NOQA
+    except:  # NOQA
         print("\033[1m\033[91m[ERROR]\033[0m Could not notify tweet on discord!")
-        if discord_notifier is None:
-            print("\t`discord_notifier` is `None`")
-        else:
-            tb = traceback.format_exc()
-            print(tb)
