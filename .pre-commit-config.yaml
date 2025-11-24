@@ -11,3 +11,10 @@ repos:
     rev: stable
     hooks:
     -   id: black
+-   repo: local
+    hooks:
+    -   id: pytest-check
+        name: pytest-check
+        entry: bash -c 'pytest ./tests'
+        language: system
+        require_serial: true

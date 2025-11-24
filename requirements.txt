@@ -4,3 +4,5 @@ pre-commit
 tqdm
 regex
 discord_webhook
+ujson
+pytest
